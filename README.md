@@ -1,0 +1,1 @@
+This code created AWS instance with role assigned to do S3 operations.
