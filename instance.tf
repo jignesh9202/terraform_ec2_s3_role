@@ -22,7 +22,7 @@ data "aws_subnet" "selected" {
 }
 
 resource "aws_instance" "ec2-s3" {
-  ami = data.aws_ssm_parameter.ami.value
+  ami = data.aws_ami_ids.ubuntu.value
   instance_type = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.test_profile.name
   subnet_id = data.aws_subnet.selected.id
