@@ -23,7 +23,7 @@ resource "aws_instance" "ec2-s3" {
   subnet_id = data.aws_subnet.selected.id
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   key_name = "jenkins_server"
-  user_data = templatefile("${path.module}/startup_script.tpl"
+  user_data = "${path.module}/startup_script.tpl"
 }
 
 resource "aws_security_group" "my-sg" {
