@@ -23,7 +23,18 @@ resource "aws_instance" "ec2-s3" {
   subnet_id = data.aws_subnet.selected.id
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   key_name = "jenkins_server"
-  user_data = "${path.module}/startup_script.tpl"
+  user_data = << EOF
+  #! /bin/bash
+  sudo yum update –y
+  sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  sudo yum upgrade
+  sudo amazon-linux-extras install java-openjdk11 -y
+  sudo yum install jenkins -y
+  sudo systemctl enable jenkins
+  sudo systemctl start jenkins
+  sudo systemctl status jenkins
+  EOF
 }
 
 resource "aws_security_group" "my-sg" {
