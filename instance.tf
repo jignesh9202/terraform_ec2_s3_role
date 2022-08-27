@@ -30,17 +30,13 @@ resource "aws_instance" "ec2-s3" {
   vpc_security_group_ids = [aws_security_group.my-sg.id]
   key_name = "jenkins_server"
   user_data = <<EOF
-#! /bin/bash
-curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
-  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-  https://pkg.jenkins.io/debian binary/ | sudo tee \
-  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 sudo apt-get update
 sudo apt-get install jenkins
-sudo apt update
-sudo apt install openjdk-11-jre
-java -version
+sudo apt install git
 EOF
 }
 
